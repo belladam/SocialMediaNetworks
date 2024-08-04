@@ -5,7 +5,9 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="vis-timeline" level="application" />
     <orderEntry type="library" name="d3.v7" level="application" />
+    <orderEntry type="library" name="vis-network" level="application" />
     <orderEntry type="library" name="vis-network" level="application" />
   </component>
 </module>
