@@ -21,7 +21,6 @@ class Comment {
       this.createdAt = new Date(createdAt);
       this.comments = [];
       this.views = [];
-      this.references = [];
     }
   
     addComment(comment) {
@@ -54,10 +53,6 @@ class Comment {
     addSeenPost(postId, viewedAt) {
       this.seenPosts.push({ postId, viewedAt: new Date(viewedAt) });
     }
-  
-    addComment(comment) {
-      this.comments.push(comment);
-    }
   }
   
   class SocialMediaNetwork {
@@ -67,21 +62,6 @@ class Comment {
 
     addUser(user) {
       this.users.push(user);
-    }
-
-    findUser(username) {
-      return this.users.find(user => user.username === username);
-    }
-
-    findPost(postId) {
-      for (const user of this.users) {
-        for (const post of user.posts) {
-          if (post.id === postId) {
-            return post;
-          }
-        }
-      }
-      return null;
     }
 
     generatePostUserGraph(criteria) {
@@ -139,8 +119,7 @@ class Comment {
 
       Object.keys(graph).forEach(nodeId => {
         const node = graph[nodeId];
-
-        let nodeOptions = { id: nodeId, label: nodeId };
+        const nodeOptions = { id: nodeId, label: nodeId };
         if (node.type === 'post') {
           nodeOptions.color = node.important ? 'lightcoral' : 'lightgray';
           nodeOptions.shape = 'box';
@@ -163,10 +142,7 @@ class Comment {
       const edges = new vis.DataSet(edgesArray);
 
       const container = document.getElementById('graph1');
-      const data = {
-        nodes: nodes,
-        edges: edges
-      };
+      const data = { nodes: nodes, edges: edges };
       const options = {};
 
       new vis.Network(container, data, options);
@@ -255,7 +231,8 @@ class Comment {
     renderTrendingPosts(trendingPosts) {
       const container = document.getElementById("graph3");
       const textContainer = document.getElementById("graph3Text");
-      textContainer.innerHTML = trendingPosts.map(tp => `<div>${tp.post.id}</div>`).join(' ');
+      textContainer.innerHTML = trendingPosts.map(tp => `<div style="padding: 10px">${tp.post.id}</div>`).join('');
+
       const nodes = trendingPosts.map((tp, index) => {
         return {
           x: index + 1,
@@ -263,7 +240,6 @@ class Comment {
           label: { content: tp.post.id }
         };
       });
-      const dataSet = new vis.DataSet(nodes);
       const options = {
         style: 'bar',
         barChart: { width: 50, align: 'center' },
@@ -317,15 +293,17 @@ class Comment {
   const post1 = new Post('post1', 'This is is is a a post by by by by user1', '2024-08-03T12:00:00Z');
   const post2 = new Post('post2', 'This is a post by user2', '2024-08-03T12:00:00Z');
   const post3 = new Post('post3', 'This is a post by user2', '2024-08-03T12:00:00Z');
-  const post4 = new Post('post4', 'This is a post by user4', '2024-08-03T12:00:00Z');
-  const post5 = new Post('post5', 'This is a post by user5', '2024-08-03T12:00:00Z');
-  const post6 = new Post('post6', 'This is a post by user5', '2024-08-03T12:00:00Z');
+  const post4 = new Post('post4', 'This is a post by user4 Hello', '2024-08-03T12:00:00Z');
+  const post5 = new Post('post5', 'This is a post by user5 Hello World', '2024-08-03T12:00:00Z');
+  const post6 = new Post('post6', 'This is a post by user5 Hello World', '2024-08-03T12:00:00Z');
   
   // Add comments and views to posts
 // Post 1
 post1.addComment(new Comment('user2', 'Great post!', '2024-07-01T12:30:00Z'));
 post1.addComment(new Comment('user3', 'Very insightful, thanks!', '2024-07-01T13:00:00Z'));
 post1.addComment(new Comment('user4', 'I learned a lot from this.', '2024-07-01T14:00:00Z'));
+post1.addComment(new Comment('user3', 'I disagree with this point.', '2024-07-02T08:20:00Z'));
+post1.addComment(new Comment('user6', 'Can you provide more details?', '2024-07-02T10:30:00Z'));
 post1.addView({ username: 'user2', viewedAt: '2024-07-01T12:10:00Z' });
 post1.addView({ username: 'user3', viewedAt: '2024-07-01T13:05:00Z' });
 post1.addView({ username: 'user4', viewedAt: '2024-07-01T14:10:00Z' });
@@ -335,8 +313,10 @@ post1.addView({ username: 'user5', viewedAt: '2024-07-01T14:20:00Z' });
 post2.addComment(new Comment('user1', 'I disagree with this point.', '2024-07-02T08:20:00Z'));
 post2.addComment(new Comment('user4', 'Interesting perspective.', '2024-07-02T09:45:00Z'));
 post2.addComment(new Comment('user6', 'Can you provide more details?', '2024-07-02T10:30:00Z'));
+post2.addComment(new Comment('user4', 'I learned a lot from this.', '2024-07-01T14:00:00Z'));
 post2.addView({ username: 'user1', viewedAt: '2024-07-02T08:00:00Z' });
 post2.addView({ username: 'user4', viewedAt: '2024-07-02T09:30:00Z' });
+post2.addView({ username: 'user6', viewedAt: '2024-07-02T09:30:00Z' });
 
 // Post 3
 post3.addComment(new Comment('user5', 'This helped me a lot, thanks!', '2024-07-03T10:15:00Z'));
