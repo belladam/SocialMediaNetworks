@@ -66,7 +66,6 @@ class Comment {
 
     generatePostUserGraph(criteria) {
       const graph = {};
-
       this.users.forEach(user => {
         graph[user.username] = { type: 'user', connections: [] };
 
@@ -89,13 +88,6 @@ class Comment {
             graph[post.id].connections.push({
               target: view.username,
               type: 'viewed'
-            });
-          });
-
-          post.comments.forEach(comment => {
-            graph[post.id].connections.push({
-              target: comment.username,
-              type: 'commented'
             });
           });
 
